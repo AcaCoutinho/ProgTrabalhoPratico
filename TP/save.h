@@ -1,3 +1,6 @@
+// Trabalho Pratico Programacao - LEI
+// DEIS-ISEC 2021-2022
+
 #ifndef SAVE_H
 #define SAVE_H
 
@@ -5,7 +8,7 @@
 
 typedef struct Save Save;
 struct Save {
-    Tabuleiro tab;
+    Celula tab;
     int* nextPlay;
 };
 

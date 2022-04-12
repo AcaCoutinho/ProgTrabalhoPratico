@@ -1,5 +1,5 @@
 // Trabalho Pratico Programacao - LEI
-// DEIS-ISEC 2020-2021
+// DEIS-ISEC 2021-2022
 
 #include <stdio.h>
 #include <stdlib.h>
