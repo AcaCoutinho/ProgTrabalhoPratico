@@ -1,6 +1,3 @@
-// Trabalho Pratico Programacao - LEI
-// DEIS-ISEC 2021-2022
-
 #ifndef SAVE_H
 #define SAVE_H
 
@@ -8,8 +5,8 @@
 
 typedef struct Save Save;
 struct Save {
-    Celula tab;
-    int* nextPlay;
+    Tabuleiro tab;
+    Save *nextPlay;
 };
 
 int fileExists();

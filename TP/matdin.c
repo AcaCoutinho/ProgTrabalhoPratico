@@ -1,6 +1,3 @@
-// Trabalho Pratico Programacao - LEI
-// DEIS-ISEC 2021-2022
-
 #include "matdin.h"
 
 
@@ -48,5 +45,39 @@ void mostraMat(char **p, int nLin, int nCol){
         for(j=0; j<nCol; j++)
             printf("%c\t", p[i][j]);
         putchar('\n');
+    }
+}
+
+Tabuleiro** inicializaTabuleiro(int nLinTab, int nColTab){
+    Tabuleiro** aux;
+
+    aux = malloc(sizeof(Tabuleiro) * nLinTab);
+    if(aux == NULL){
+        printf("Erro!");
+        return NULL;
+    }
+    for(int i = 0; i < nLinTab; i++){
+        aux[i] = malloc(sizeof(Tabuleiro) * nColTab);
+        if(aux[i] == NULL){
+            printf("Erro!");
+            return NULL;
+        }
+    }
+
+    for(int i = 0; i < nLinTab; i++){
+        for(int j = 0; j < nColTab; j++){
+            aux[i][j].tab = criaMat(3, 3);
+            aux[i][j].completed = 0;
+        }
+    }
+
+    return aux;
+}
+
+void mostraTabuleiro(Tabuleiro** tab, int nLin, int nCol){
+    for(int i = 0; i < nLin; i++){
+        for(int j = 0; j < nCol; j++){
+            mostraMat(tab[i][j].tab, nLin, nCol);
+        }
     }
 }

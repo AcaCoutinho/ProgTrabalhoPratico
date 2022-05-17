@@ -1,105 +1,76 @@
-// Trabalho Pratico Programacao - LEI
-// DEIS-ISEC 2021-2022
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "save.h"
 #include "matdin.h"
 
 void game() {
-    if (fileExists()) {
-        startMemoria();
-    }
+    int option;
+    do {
+        option = menuPrincipal();
+        switch (option) {
+            case 1:
+                startPlayer();
+                break;
 
-    int option = menuPrincipal();
-    switch (option) {
-    case 1:
-        startPlayer();
-        break;
-    
-    case 2:
-        startBot();
-        break;
+            case 2:
+                //startBot();
+                break;
+            case 4:
+
+                break;
+            case 9:
+                break;
+        }
     }
+    while(option != 9);
 }
 
 void startPlayer() {
-    Celula** tab;
+    Tabuleiro **tab = NULL;
 
-    tab = iniciaTab();
+    tab = inicializaTabuleiro(3, 3);
+    mostraTabuleiro(tab, 3, 3);
+    if(tab == NULL)
+       return;
 
-    do {
+    do{
 
-
-
-    } while(!finished());
+    }
+    while(!finish(tab));
 }
+
+//TODO: Falta fazer o empate
+int finish(Tabuleiro **tab){
+    if(tab[0][0].completed == tab[1][1].completed == tab[2][2].completed
+        && tab[0][0].completed != 0){
+        return TRUE;
+    }
+
+    for(int i = 0; i < NLIN; i++){
+        if(tab[i][0].completed == tab[i][1].completed == tab[i][2].completed
+            && tab[i][0].completed != 0){
+           return TRUE;
+        }
+
+        if(tab[0][i].completed == tab[1][i].completed == tab[2][i].completed
+            && tab[0][i].completed != 0){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 
 int menuPrincipal() {
     int option;
     printf("Escolha uma das seguintes opcoes:\n");
     printf("1. Jogar contra outro Jogador\n");
     printf("2. Jogar contra Bot\n");
-         
-    do{
-        printf(">>> ");
-        scanf("%d", &option);
-    } while (option < 1 || option > 2);
-    
+    printf("3. Regras\n");
+    printf("9. SAIR\n");
+
+    printf(">>> ");
+    scanf("%d", &option);
     return option;
 }
 
-void startBot() {
-    Celula** tab;
-
-    tab = iniciaTab();
-
-    do {
-
-    } while(!finished());
-}
-
-void startMemoria() {
-    Celula** tab;
-
-    tab = iniciaTab();
-
-    do {
-        showTab(tab);
-    } while(!finished());
-}
-
-Celula** iniciaTab() {
-    Celula** aux = NULL;
-    
-    aux = malloc(sizeof(Celula) * 3);
-    for (int k = 0; k < 3; k++) {
-        aux[k] = malloc(sizeof(Celula) * 3);
-    }
-    
-    for (int i = 0; i < 3; i++){ 
-        for (int j = 0; j < 3; j++){
-            aux[i][j].completed = 0;
-            aux[i][j].player = 0;
-            aux[i][j].tab = criaMat(3, 3);
-        }
-    }
-
-    return aux;
-}
-
-void showTab(Celula** aux) {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            //TODO: Refazer esta parte para ficar bonitxinho
-            mostraMat(aux[i][j].tab, 3, 3);
-        }
-        printf("\n");
-    }
-}
-
-int finished() {
-    
-    
-    return 0;
-}

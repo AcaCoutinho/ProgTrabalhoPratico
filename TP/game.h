@@ -1,15 +1,15 @@
-// Trabalho Pratico Programacao - LEI
-// DEIS-ISEC 2021-2022
-
 #ifndef GAME_H
 #define GAME_H
 
+#define NCOL 3
+#define NLIN 3
+#define TRUE 1
+#define FALSE 0
 
-typedef struct Celula Celula;
-struct Celula {
+typedef struct Tabuleiro Tabuleiro;
+struct Tabuleiro {
     char** tab;
     int completed;
-    int player;
 };
 
 void game();
@@ -20,12 +20,6 @@ void startPlayer();
 
 void startBot();
 
-void startMemoria();
-
-Celula** iniciaTab();
-
-void showTab(Celula** aux);
-
-int finished();
+int finish(Tabuleiro **tab);
 
 #endif /*GAME_H*/
