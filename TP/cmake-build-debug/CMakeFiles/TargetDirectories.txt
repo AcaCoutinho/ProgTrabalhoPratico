@@ -1,3 +1,0 @@
-C:/P/ProgTrabalhoPratico-main/TP/cmake-build-debug/CMakeFiles/TP.dir
-C:/P/ProgTrabalhoPratico-main/TP/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/P/ProgTrabalhoPratico-main/TP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
