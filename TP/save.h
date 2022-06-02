@@ -1,11 +1,19 @@
+// Trabalho Pratico Programacao - LEI
+// Trabalho de Programacao 2021/2022
+// Acacio Agabalayeve Coutinho 2020141948
+// DEIS-ISEC 2021-2022
+
 #ifndef SAVE_H
 #define SAVE_H
 
 #include "game.h"
+#include "matdin.h"
 
 typedef struct Save Save;
+typedef struct Tabuleiro Tabuleiro;
 struct Save {
-    Tabuleiro tab;
+    Tabuleiro **tab;
+    int jogada;
     Save *nextPlay;
 };
 

@@ -1,4 +1,6 @@
 // Trabalho Pratico Programacao - LEI
+// Trabalho de Programacao 2021/2022
+// Acacio Agabalayeve Coutinho 2020141948
 // DEIS-ISEC 2021-2022
 
 #ifndef MATDIN_H
@@ -21,5 +23,9 @@ char getPos(char **p, int x, int y);
 Tabuleiro** inicializaTabuleiro(int nLin, int nCol);
 
 void mostraTabuleiro(Tabuleiro** tab, int nLin, int nCol);
+
+void imprimeLinhaTabuleiro(Tabuleiro tab, int linha);
+
+void verificaCompleto(Tabuleiro tab);
 
 #endif /*MATDIN_H*/

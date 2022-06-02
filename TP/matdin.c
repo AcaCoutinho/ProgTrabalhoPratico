@@ -1,5 +1,9 @@
-#include "matdin.h"
+// Trabalho Pratico Programacao - LEI
+// Trabalho de Programacao 2021/2022
+// Acacio Agabalayeve Coutinho 2020141948
+// DEIS-ISEC 2021-2022
 
+#include "matdin.h"
 
 void libertaMat(char** p, int nLin){
 
@@ -66,7 +70,7 @@ Tabuleiro** inicializaTabuleiro(int nLinTab, int nColTab){
 
     for(int i = 0; i < nLinTab; i++){
         for(int j = 0; j < nColTab; j++){
-            aux[i][j].tab = criaMat(3, 3);
+            aux[i][j].tab = criaMat(NLIN, NCOL);
             aux[i][j].completed = 0;
         }
     }
@@ -74,10 +78,48 @@ Tabuleiro** inicializaTabuleiro(int nLinTab, int nColTab){
     return aux;
 }
 
-void mostraTabuleiro(Tabuleiro** tab, int nLin, int nCol){
-    for(int i = 0; i < nLin; i++){
-        for(int j = 0; j < nCol; j++){
-            mostraMat(tab[i][j].tab, nLin, nCol);
+void mostraTabuleiro(Tabuleiro** tab, int nLin, int nCol) {
+    printf("\n---------------------------------\n");
+    for(int i = 0; i < NLIN; i++){
+        for(int k = 0; k < 4; k++){
+            for(int j = 0; j < NCOL; j++){
+                switch (k) {
+                    case 0:
+                        imprimeLinhaTabuleiro(tab[i][j], k);
+                        break;
+                    case 1:
+                        imprimeLinhaTabuleiro(tab[i][j], k);
+                        break;
+                    case 2:
+                        imprimeLinhaTabuleiro(tab[i][j], k);
+                        break;
+                    case 3:
+                        printf("-----------");
+                        break;
+                }
+            }
+            printf("\n");
         }
+    }
+}
+
+void imprimeLinhaTabuleiro(Tabuleiro tab, int linha){
+    printf("|");
+    for(int i = 0; i < NCOL; i++){
+        printf(" %c ", tab.tab[linha][i]);
+    }
+    printf("|");
+}
+
+void verificaCompleto(Tabuleiro tab){
+    if(tab.tab[0][0] == tab.tab[1][1] && tab.tab[1][1] == tab.tab[2][2] && tab.completed != 0){
+        if(tab.tab[0][0] == 'O')
+            tab.completed = 1;
+        if(tab.tab[0][0] == 'X')
+            tab.completed = 2;
+    }
+
+    for(int i = 0; i < 3; i++){
+
     }
 }
