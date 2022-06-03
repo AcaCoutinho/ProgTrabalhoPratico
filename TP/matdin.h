@@ -26,6 +26,8 @@ void mostraTabuleiro(Tabuleiro** tab, int nLin, int nCol);
 
 void imprimeLinhaTabuleiro(Tabuleiro tab, int linha);
 
-void verificaCompleto(Tabuleiro tab);
+int verificaTabuleiro(Tabuleiro tab);
+
+int verificaCompletoTab(Tabuleiro tab);
 
 #endif /*MATDIN_H*/

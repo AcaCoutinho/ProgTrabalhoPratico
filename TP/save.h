@@ -12,8 +12,9 @@
 typedef struct Save Save;
 typedef struct Tabuleiro Tabuleiro;
 struct Save {
-    Tabuleiro **tab;
+    int lin, col;
     int jogada;
+    int vencedor;
     Save *nextPlay;
 };
 

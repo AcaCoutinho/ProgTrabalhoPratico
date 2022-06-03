@@ -5,9 +5,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "matdin.h"
-#include "save.h"
 #include "utils.h"
+#include "matdin.h"
+#include "game.h"
+
 
 void game() {
     int option;
@@ -30,7 +31,6 @@ void game() {
     while(option != 9);
 }
 
-//TODO: Falta implementar os saves
 void startPlayer() {
     Tabuleiro **tab = NULL;
     Save save;
@@ -51,7 +51,8 @@ void startPlayer() {
         jogada(tab, player);
         mostraTabuleiro(tab, NLIN, NCOL);
     }
-    while(!finish(tab));
+    while(!finish(tab, &save));
+    mostraVencedor(save);
 }
 
 void startBot(){
@@ -60,6 +61,7 @@ void startBot(){
     save.jogada = 0;
     int player;
 
+    initRandom();
     printf("Criacao do Tabuleiro\n");
     tab = inicializaTabuleiro(NLIN, NCOL);
     if(tab == NULL)
@@ -78,33 +80,59 @@ void startBot(){
         }
         mostraTabuleiro(tab, NLIN, NCOL);
     }
-    while(!finish(tab));
+    while(!finish(tab, &save));
+    mostraVencedor(save);
 }
 
-//TODO: Falta fazer o empate
-int finish(Tabuleiro **tab){
+int finish(Tabuleiro **tab, Save *save){
+    int count = 0;
+
     for(int i = 0; i < NLIN; i++){
         for(int j = 0; j < NCOL; j++){
-           verificaCompleto(tab[i][j]);
-           //printf(tab[][])
+            count += verificaCompletoTab(tab[i][j]);
+            if(tab[i][j].completed == 0)
+                tab[i][j].completed = verificaTabuleiro(tab[i][j]);
         }
     }
 
-    if(tab[0][0].completed == tab[1][1].completed == tab[2][2].completed
+    if(tab[0][0].completed == tab[1][1].completed && tab[1][1].completed == tab[2][2].completed
         && tab[0][0].completed != 0){
+        if(tab[0][0].completed == 1){
+            save->vencedor = 1;
+        }
+        else{
+            save->vencedor = 2;
+        }
         return TRUE;
     }
 
     for(int i = 0; i < NLIN; i++){
-        if(tab[i][0].completed == tab[i][1].completed == tab[i][2].completed
+        if(tab[i][0].completed == tab[i][1].completed && tab[i][1].completed == tab[i][2].completed
             && tab[i][0].completed != 0){
+            if(tab[i][0].completed == 1){
+                save->vencedor = 1;
+            }
+            else{
+                save->vencedor = 2;
+            }
            return TRUE;
         }
 
-        if(tab[0][i].completed == tab[1][i].completed == tab[2][i].completed
+        if(tab[0][i].completed == tab[1][i].completed && tab[1][i].completed == tab[2][i].completed
             && tab[0][i].completed != 0){
+            if(tab[0][i].completed == 1){
+                save->vencedor = 1;
+            }
+            else{
+                save->vencedor = 2;
+            }
             return TRUE;
         }
+    }
+
+    if(count == 0){
+        save->vencedor = 3;
+        return TRUE;
     }
     return FALSE;
 }
@@ -158,4 +186,12 @@ void jogada(Tabuleiro** tab, int player) {
     }
     while (!isFinished);
     printf("\nJogada terminada\n");
+}
+
+void mostraVencedor(Save save){
+    if(save.vencedor == 3){
+        printf("\n\tO jogo terminou num empate...\n\n");
+    } else {
+           printf("\n\tO vencedor e o jogador %d!\n\n", save.vencedor);
+    }
 }

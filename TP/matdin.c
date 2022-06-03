@@ -111,15 +111,46 @@ void imprimeLinhaTabuleiro(Tabuleiro tab, int linha){
     printf("|");
 }
 
-void verificaCompleto(Tabuleiro tab){
-    if(tab.tab[0][0] == tab.tab[1][1] && tab.tab[1][1] == tab.tab[2][2] && tab.completed != 0){
-        if(tab.tab[0][0] == 'O')
-            tab.completed = 1;
-        if(tab.tab[0][0] == 'X')
-            tab.completed = 2;
+int verificaTabuleiro(Tabuleiro tab){
+    if(tab.tab[0][0] == tab.tab[1][1] && tab.tab[1][1] == tab.tab[2][2]
+    && tab.tab[0][0] != '_'){
+        if(tab.tab[0][0] == 'O'){
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     for(int i = 0; i < 3; i++){
-
+        if(tab.tab[0][i] == tab.tab[1][i] && tab.tab[1][i] == tab.tab[2][i]
+        && tab.tab[0][i] != '_'){
+            if(tab.tab[0][i] == 'O'){
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+        if(tab.tab[i][0] == tab.tab[i][1] && tab.tab[i][1] == tab.tab[i][2]
+           && tab.tab[i][0] != '_'){
+            if(tab.tab[i][0] == 'O'){
+                return 1;
+            } else {
+                return 2;
+            }
+        }
     }
+
+    return 0;
+}
+
+int verificaCompletoTab(Tabuleiro tab){
+    int count = 0;
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(tab.tab[i][j] == '_'){
+                count += 1;
+            }
+        }
+    }
+    return count;
 }

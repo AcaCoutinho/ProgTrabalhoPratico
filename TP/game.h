@@ -6,16 +6,18 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define NCOL 3
-#define NLIN 3
-#define TRUE 1
-#define FALSE 0
-
 typedef struct Tabuleiro Tabuleiro;
 struct Tabuleiro {
     char** tab;
     int completed;
 };
+
+#include "save.h"
+
+#define NCOL 3
+#define NLIN 3
+#define TRUE 1
+#define FALSE 0
 
 void game();
 
@@ -25,12 +27,14 @@ void startPlayer();
 
 void startBot();
 
-int finish(Tabuleiro **tab);
+int finish(Tabuleiro **tab, Save *save);
 
 void regras();
 
 int jogador(int jogada);
 
 void jogada(Tabuleiro** tab, int player);
+
+void mostraVencedor(Save save);
 
 #endif /*GAME_H*/
