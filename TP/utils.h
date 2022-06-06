@@ -18,6 +18,6 @@ int conversorLinColTab(int num);
 
 int conversorLinCol(int num);
 
-void jogadaBot(Tabuleiro **tab);
+void jogadaBot(Tabuleiro **tab, Save *save);
 
 #endif

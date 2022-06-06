@@ -41,14 +41,19 @@ int conversorLinCol(int num){
     }
 }
 
-void jogadaBot(Tabuleiro **tab){
+void jogadaBot(Tabuleiro **tab, Save *save){
     int isPossible = FALSE;
-    int lin = intUniformRnd(0, NLIN * 3);
-    int col = intUniformRnd(0, NCOL * 3);
+    int lin, col;
 
     do{
-        if(tab[conversorLinColTab(lin)][conversorLinColTab(col)].tab[conversorLinCol(lin)][conversorLinCol(col)] == '_'){
-            tab[conversorLinColTab(lin)][conversorLinColTab(col)].tab[conversorLinCol(lin)][conversorLinCol(col)] = 'X';
+        lin = intUniformRnd(1, NLIN * 3);
+        col = intUniformRnd(1, NCOL * 3);
+
+        save->lin = lin;
+        save->col = col;
+
+        if(tab[conversorLinColTab(lin-1)][conversorLinColTab(col-1)].tab[conversorLinCol(lin-1)][conversorLinCol(col-1)] == '_'){
+            tab[conversorLinColTab(lin-1)][conversorLinColTab(col-1)].tab[conversorLinCol(lin-1)][conversorLinCol(col-1)] = 'X';
             isPossible = TRUE;
         }
     } while(!isPossible);

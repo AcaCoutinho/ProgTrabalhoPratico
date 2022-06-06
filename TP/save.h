@@ -6,11 +6,7 @@
 #ifndef SAVE_H
 #define SAVE_H
 
-#include "game.h"
-#include "matdin.h"
-
 typedef struct Save Save;
-typedef struct Tabuleiro Tabuleiro;
 struct Save {
     int lin, col;
     int jogada;
@@ -18,6 +14,30 @@ struct Save {
     Save *nextPlay;
 };
 
-int fileExists();
+#include "game.h"
+#include "matdin.h"
+#include "utils.h"
+
+void printLista(Save* save);
+
+Save* insereInicio(Save *save, Save s);
+
+void imprimeJogoFile(char *fileName, Save *save);
+
+void imprimeJogadasAnterior(Save *save);
+
+int existsBinaryFile();
+
+void escreveFicheiroBinario(Save *save, int isPlayer);
+
+Save* readBinaryFile(Save* save, int *isPlayer);
+
+void libertaListaLigada(Save *save);
+
+void carregaJogoJogador(Save* save);
+
+void carregaJogoBot(Save* save);
+
+Tabuleiro** carregaTabuleiro(Tabuleiro **tab, Save *save);
 
 #endif /*SAVE_H*/

@@ -33,8 +33,10 @@ void regras();
 
 int jogador(int jogada);
 
-void jogada(Tabuleiro** tab, int player);
+void jogada(Tabuleiro** tab, int player, Save* save);
 
 void mostraVencedor(Save save);
+
+int menuJogadas();
 
 #endif /*GAME_H*/

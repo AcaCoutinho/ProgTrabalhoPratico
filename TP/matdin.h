@@ -30,4 +30,6 @@ int verificaTabuleiro(Tabuleiro tab);
 
 int verificaCompletoTab(Tabuleiro tab);
 
+void libertaTabuleiro(Tabuleiro **tab, int nLin);
+
 #endif /*MATDIN_H*/

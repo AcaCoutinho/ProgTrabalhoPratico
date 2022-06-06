@@ -11,6 +11,29 @@
 
 
 void game() {
+    if(existsBinaryFile()){
+        int option;
+        int isPlayer;
+
+        printf("\nEscolha uma das seguintes opcoes:\n");
+        printf("1. Pretende carregar o jogo guardado\n");
+        printf("2. Nao pretende carregar o jogo guardado\n");
+        do{
+            printf(">>>");
+            scanf("%d", &option);
+        }
+        while(option < 1 || option > 2);
+        if(option == 1){
+            Save *save = NULL;
+            save = readBinaryFile(save, &isPlayer);
+            if(isPlayer){
+                carregaJogoJogador(save);
+            } else {
+                carregaJogoBot(save);
+            }
+        }
+    }
+
     int option;
     do {
         option = menuPrincipal();
@@ -33,8 +56,10 @@ void game() {
 
 void startPlayer() {
     Tabuleiro **tab = NULL;
-    Save save;
-    save.jogada = 0;
+    Save* save = NULL;
+
+    Save s;
+    s.jogada = 0;
     int player;
 
     printf("Criacao do Tabuleiro\n");
@@ -44,21 +69,42 @@ void startPlayer() {
     mostraTabuleiro(tab, NLIN, NCOL);
 
     do{
-        player = jogador(save.jogada);
-        printf("Jogada: %d\n", ++save.jogada);
+        player = jogador(s.jogada);
+        printf("Jogada: %d\n", ++s.jogada);
         printf("Jogador %d\n", player);
 
-        jogada(tab, player);
+        int isFinished = FALSE;
+        do {
+            int option = menuJogadas();
+            switch (option) {
+                case 1:
+                    jogada(tab, player, &s);
+                    isFinished = TRUE;
+                    break;
+                case 2:
+                    imprimeJogadasAnterior(save);
+                    break;
+                case 3:
+                    //TODO: Libertar memoria
+                    return;
+            }
+        }
+        while(!isFinished);
         mostraTabuleiro(tab, NLIN, NCOL);
+        save = insereInicio(save, s);
+        escreveFicheiroBinario(save, TRUE);
     }
-    while(!finish(tab, &save));
-    mostraVencedor(save);
+    while(!finish(tab, &s));
+    mostraVencedor(s);
+    //TODO: Libertar memoria
 }
 
 void startBot(){
     Tabuleiro **tab = NULL;
-    Save save;
-    save.jogada = 0;
+    Save* save = NULL;
+
+    Save s;
+    s.jogada = 0;
     int player;
 
     initRandom();
@@ -69,19 +115,38 @@ void startBot(){
     mostraTabuleiro(tab, NLIN, NCOL);
 
     do{
-        player = jogador(save.jogada);
-        printf("Jogada: %d\n", ++save.jogada);
+        player = jogador(s.jogada);
+        printf("Jogada: %d\n", ++s.jogada);
         if(player == 1) {
             printf("Jogador %d\n", player);
-            jogada(tab, player);
+            int isFinished = FALSE;
+            do {
+                int option = menuJogadas();
+                switch (option) {
+                    case 1:
+                        jogada(tab, player, &s);
+                        isFinished = TRUE;
+                        break;
+                    case 2:
+                        imprimeJogadasAnterior(save);
+                        break;
+                    case 3:
+                        //TODO: Libertar memoria
+                        return;
+                }
+            }
+            while(!isFinished);
         } else {
             printf("Jogada: BOT\n");
-            jogadaBot(tab);
+            jogadaBot(tab, &s);
         }
         mostraTabuleiro(tab, NLIN, NCOL);
+        save = insereInicio(save, s);
+        escreveFicheiroBinario(save, FALSE);
+        //TODO: Libertar memoria
     }
-    while(!finish(tab, &save));
-    mostraVencedor(save);
+    while(!finish(tab, &s));
+    mostraVencedor(s);
 }
 
 int finish(Tabuleiro **tab, Save *save){
@@ -139,6 +204,7 @@ int finish(Tabuleiro **tab, Save *save){
 
 int menuPrincipal() {
     int option;
+    printf("\n\n\n");
     printf("Escolha uma das seguintes opcoes:\n");
     printf("1. Jogar contra outro Jogador\n");
     printf("2. Jogar contra Bot\n");
@@ -162,9 +228,9 @@ int jogador(int jogada){
         return 2;
 }
 
-void jogada(Tabuleiro** tab, int player) {
-    int lin, col;
+void jogada(Tabuleiro** tab, int player, Save *save) {
     int isFinished = FALSE;
+    int lin, col;
 
     do {
         do {
@@ -172,6 +238,9 @@ void jogada(Tabuleiro** tab, int player) {
             printf(">>> ");
             scanf("%d,%d", &lin, &col);
         } while (lin < 0 || lin > NLIN * NCOL && col < 0 || col > NCOL * NLIN);
+
+        save->lin = lin;
+        save->col = col;
 
         if (tab[conversorLinColTab(lin-1)][conversorLinColTab(col-1)].tab[conversorLinCol(lin-1)][conversorLinCol(col-1)] == '_') {
             if (player == 1) {
@@ -194,4 +263,21 @@ void mostraVencedor(Save save){
     } else {
            printf("\n\tO vencedor e o jogador %d!\n\n", save.vencedor);
     }
+}
+
+int menuJogadas(){
+    int option;
+
+    printf("Escolha uma das seguintes opcoes:\n");
+    printf("1. Jogar Jogada:\n");
+    printf("2. Visualizar 10 Jogadas Anteriores:\n");
+    printf("3. Sair e Gravar Jogo:\n");
+    do{
+        printf(">>> ");
+        scanf("%d", &option);
+    }
+    while(option < 1 || option > 3);
+    printf("\n");
+
+    return option;
 }

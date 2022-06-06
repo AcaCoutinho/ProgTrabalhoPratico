@@ -6,7 +6,6 @@
 #include "matdin.h"
 
 void libertaMat(char** p, int nLin){
-
     int i;
 
     for(i=0; i<nLin; i++)
@@ -55,22 +54,23 @@ void mostraMat(char **p, int nLin, int nCol){
 Tabuleiro** inicializaTabuleiro(int nLinTab, int nColTab){
     Tabuleiro** aux;
 
-    aux = malloc(sizeof(Tabuleiro) * nLinTab);
+    aux = malloc(sizeof (Tabuleiro) * NLIN);
     if(aux == NULL){
-        printf("Erro!");
+        printf("Erro na criacao do tabuleiro!");
         return NULL;
     }
-    for(int i = 0; i < nLinTab; i++){
-        aux[i] = malloc(sizeof(Tabuleiro) * nColTab);
+    for(int i = 0; i < NLIN; i++){
+        aux[i] = malloc(sizeof (Tabuleiro) * NCOL);
         if(aux[i] == NULL){
-            printf("Erro!");
+            libertaTabuleiro(aux, i - 1);
+            printf("Erro na criacao do tabuleiro!!");
             return NULL;
         }
     }
 
-    for(int i = 0; i < nLinTab; i++){
-        for(int j = 0; j < nColTab; j++){
-            aux[i][j].tab = criaMat(NLIN, NCOL);
+    for(int i = 0; i < NLIN; i++){
+        for(int j = 0; j < NCOL; j++){
+            aux[i][j].tab = criaMat(3, 3);
             aux[i][j].completed = 0;
         }
     }
@@ -93,7 +93,7 @@ void mostraTabuleiro(Tabuleiro** tab, int nLin, int nCol) {
                     case 2:
                         imprimeLinhaTabuleiro(tab[i][j], k);
                         break;
-                    case 3:
+                    default:
                         printf("-----------");
                         break;
                 }
@@ -153,4 +153,14 @@ int verificaCompletoTab(Tabuleiro tab){
         }
     }
     return count;
+}
+
+void libertaTabuleiro(Tabuleiro **tab, int nLin){
+    for(int i = 0; i < NLIN; i++)
+        for(int j = 0; j < NCOL; j++)
+            libertaMat(tab[i][j].tab, 3);
+
+    for(int i = 0; i < nLin; i++)
+        free(tab[i]);
+    free(tab);
 }
