@@ -22,7 +22,7 @@ void printLista(Save* save);
 
 Save* insereInicio(Save *save, Save s);
 
-void imprimeJogoFile(char *fileName, Save *save);
+void imprimeJogoFile(char *fileName, Save *save, int isPlayer);
 
 void imprimeJogadasAnterior(Save *save);
 
@@ -39,5 +39,7 @@ void carregaJogoJogador(Save* save);
 void carregaJogoBot(Save* save);
 
 Tabuleiro** carregaTabuleiro(Tabuleiro **tab, Save *save);
+
+void deleteBinaryFile();
 
 #endif /*SAVE_H*/

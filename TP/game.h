@@ -39,4 +39,6 @@ void mostraVencedor(Save save);
 
 int menuJogadas();
 
+int menuFicheiros();
+
 #endif /*GAME_H*/

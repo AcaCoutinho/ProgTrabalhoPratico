@@ -66,18 +66,23 @@ Save* insereInicio(Save *save, Save s){
     return save;
 }
 
-void imprimeJogoFile(char *fileName, Save *save){
+void imprimeJogoFile(char fileName[50], Save *save, int isPlayer){
     FILE *f;
 
     f = fopen(fileName, "wt");
     if(f == NULL){
-        printf("");
+        printf("Erro");
         return;
     }
 
-    for(int i = 1; save != NULL; i++){
-        fprintf_s(f, "%d.", i);
-        printf("\n");
+    if(isPlayer == TRUE){
+        fprintf(f, "Jogo contra Jogador\n");
+    } else {
+        fprintf(f, "Jogo contra BOT\n");
+    }
+    while(save != NULL){
+        fprintf(f, "Jogada [%d] feita pelo jogador [%d] na posicao(lin,col) [%d],[%d]", save->jogada, jogador(save->jogada), save->lin, save->col);
+        fprintf(f, "\n");
         save = save->nextPlay;
     }
 
@@ -97,8 +102,10 @@ int existsBinaryFile(){
 
     f = fopen("save.bin", "rb");
     if(f == NULL){
+        fclose(f);
         return 0;
     }
+    fclose(f);
     return 1;
 }
 
@@ -164,8 +171,8 @@ void carregaJogoJogador(Save* save) {
     int player;
 
     do{
-        player = jogador(s.jogada);
         printf("Jogada: %d\n", ++s.jogada);
+        player = jogador(s.jogada);
         printf("Jogador %d\n", player);
 
         int isFinished = FALSE;
@@ -180,7 +187,8 @@ void carregaJogoJogador(Save* save) {
                     imprimeJogadasAnterior(save);
                     break;
                 case 3:
-                    //TODO: Libertar memoria
+                    libertaListaLigada(save);
+                    libertaTabuleiro(tab, NLIN);
                     return;
             }
         }
@@ -191,8 +199,8 @@ void carregaJogoJogador(Save* save) {
     }
     while(!finish(tab, &s));
     mostraVencedor(s);
-    //TODO: Libertar memoria
-
+    libertaListaLigada(save);
+    libertaTabuleiro(tab, NLIN);
 }
 
 void carregaJogoBot(Save* save){
@@ -205,8 +213,8 @@ void carregaJogoBot(Save* save){
     int player;
 
     do{
-        player = jogador(s.jogada);
         printf("Jogada: %d\n", ++s.jogada);
+        player = jogador(s.jogada);
         if(player == 1) {
             printf("Jogador %d\n", player);
             int isFinished = FALSE;
@@ -221,7 +229,8 @@ void carregaJogoBot(Save* save){
                         imprimeJogadasAnterior(save);
                         break;
                     case 3:
-                        //TODO: Libertar memoria
+                        libertaListaLigada(save);
+                        libertaTabuleiro(tab, NLIN);
                         return;
                 }
             }
@@ -233,21 +242,30 @@ void carregaJogoBot(Save* save){
         mostraTabuleiro(tab, NLIN, NCOL);
         save = insereInicio(save, s);
         escreveFicheiroBinario(save, FALSE);
-        //TODO: Libertar memoria
     }
     while(!finish(tab, &s));
     mostraVencedor(s);
+    libertaListaLigada(save);
+    libertaTabuleiro(tab, NLIN);
 }
 
 Tabuleiro** carregaTabuleiro(Tabuleiro **tab, Save *save){
     tab = inicializaTabuleiro(NLIN, NCOL);
     while(save != NULL){
-        if(jogador(save->jogada)){
-            tab[conversorLinColTab(save->lin-1)][conversorLinColTab(save->col-1)].tab[conversorLinCol(save->lin-1)][conversorLinCol(save->lin-1)] = 'O';
+        if(jogador(save->jogada) == 1){
+            tab[conversorLinColTab(save->lin-1)][conversorLinColTab(save->col-1)].tab[conversorLinCol(save->lin-1)][conversorLinCol(save->col-1)] = 'O';
         } else {
-            tab[conversorLinColTab(save->lin-1)][conversorLinColTab(save->col-1)].tab[conversorLinCol(save->lin-1)][conversorLinCol(save->lin-1)] = 'X';
+            tab[conversorLinColTab(save->lin-1)][conversorLinColTab(save->col-1)].tab[conversorLinCol(save->lin-1)][conversorLinCol(save->col-1)] = 'X';
         }
         save = save->nextPlay;
     }
     return tab;
+}
+
+void deleteBinaryFile(){
+    if(remove("save.bin") != 0){
+        printf("Erro ao deletar o ficheiro\n");
+    } else {
+        printf("\nFicheiro Binario Removido\n");
+    }
 }

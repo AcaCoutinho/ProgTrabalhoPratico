@@ -69,8 +69,8 @@ void startPlayer() {
     mostraTabuleiro(tab, NLIN, NCOL);
 
     do{
-        player = jogador(s.jogada);
         printf("Jogada: %d\n", ++s.jogada);
+        player = jogador(s.jogada);
         printf("Jogador %d\n", player);
 
         int isFinished = FALSE;
@@ -106,6 +106,8 @@ void startBot(){
     Save s;
     s.jogada = 0;
     int player;
+    int option;
+    char filename[50];
 
     initRandom();
     printf("Criacao do Tabuleiro\n");
@@ -115,8 +117,8 @@ void startBot(){
     mostraTabuleiro(tab, NLIN, NCOL);
 
     do{
-        player = jogador(s.jogada);
         printf("Jogada: %d\n", ++s.jogada);
+        player = jogador(s.jogada);
         if(player == 1) {
             printf("Jogador %d\n", player);
             int isFinished = FALSE;
@@ -132,6 +134,7 @@ void startBot(){
                         break;
                     case 3:
                         //TODO: Libertar memoria
+                        deleteBinaryFile();
                         return;
                 }
             }
@@ -147,6 +150,14 @@ void startBot(){
     }
     while(!finish(tab, &s));
     mostraVencedor(s);
+    option = menuFicheiros();
+    if(option == 1){
+        fflush(stdin);
+        printf("Digita o nome do ficheiro:\n");
+        scanf("%s", filename);
+        imprimeJogoFile(filename, save, FALSE);
+    }
+
 }
 
 int finish(Tabuleiro **tab, Save *save){
@@ -223,9 +234,9 @@ void regras(){
 
 int jogador(int jogada){
     if(jogada % 2 == 0)
-        return 1;
-    else
         return 2;
+    else
+        return 1;
 }
 
 void jogada(Tabuleiro** tab, int player, Save *save) {
@@ -279,5 +290,21 @@ int menuJogadas(){
     while(option < 1 || option > 3);
     printf("\n");
 
+    return option;
+}
+
+int menuFicheiros(){
+    int option;
+
+    printf("Pretende guardar o jogo num ficheiro:\n");
+    printf("1. SIM:\n");
+    printf("2. NAO:\n");
+
+    do{
+        printf(">>> ");
+        scanf("%d", &option);
+    }
+    while(option < 1 || option > 2);
+    printf("\n");
     return option;
 }
