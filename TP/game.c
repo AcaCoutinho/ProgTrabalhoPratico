@@ -4,7 +4,6 @@
 // DEIS-ISEC 2021-2022
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "utils.h"
 #include "matdin.h"
 #include "game.h"
@@ -44,9 +43,6 @@ void game() {
             case 2:
                 startBot();
                 break;
-            case 3:
-                regras();
-                break;
             case 9:
                 break;
         }
@@ -61,6 +57,9 @@ void startPlayer() {
     Save s;
     s.jogada = 0;
     int player;
+    int option;
+    int finished;
+    char filename[50];
 
     printf("Criacao do Tabuleiro\n");
     tab = inicializaTabuleiro(NLIN, NCOL);
@@ -85,18 +84,29 @@ void startPlayer() {
                     imprimeJogadasAnterior(save);
                     break;
                 case 3:
-                    //TODO: Libertar memoria
+                    libertaTabuleiro(tab, NLIN);
+                    libertaListaLigada(save);
                     return;
             }
         }
         while(!isFinished);
+        finished = finish(tab, &s);
         mostraTabuleiro(tab, NLIN, NCOL);
         save = insereInicio(save, s);
         escreveFicheiroBinario(save, TRUE);
     }
-    while(!finish(tab, &s));
+    while(!finished);
     mostraVencedor(s);
-    //TODO: Libertar memoria
+    deleteBinaryFile();
+    option = menuFicheiros();
+    if(option == 1){
+        fflush(stdin);
+        printf("Digita o nome do ficheiro:\n");
+        scanf("%s", filename);
+        imprimeJogoFile(filename, save, FALSE);
+    }
+    libertaTabuleiro(tab, NLIN);
+    libertaListaLigada(save);
 }
 
 void startBot(){
@@ -108,6 +118,7 @@ void startBot(){
     int player;
     int option;
     char filename[50];
+    int finished;
 
     initRandom();
     printf("Criacao do Tabuleiro\n");
@@ -133,8 +144,8 @@ void startBot(){
                         imprimeJogadasAnterior(save);
                         break;
                     case 3:
-                        //TODO: Libertar memoria
-                        deleteBinaryFile();
+                        libertaTabuleiro(tab, NLIN);
+                        libertaListaLigada(save);
                         return;
                 }
             }
@@ -143,13 +154,14 @@ void startBot(){
             printf("Jogada: BOT\n");
             jogadaBot(tab, &s);
         }
+        finished = finish(tab, &s);
         mostraTabuleiro(tab, NLIN, NCOL);
         save = insereInicio(save, s);
         escreveFicheiroBinario(save, FALSE);
-        //TODO: Libertar memoria
     }
-    while(!finish(tab, &s));
+    while(!finished);
     mostraVencedor(s);
+    deleteBinaryFile();
     option = menuFicheiros();
     if(option == 1){
         fflush(stdin);
@@ -157,7 +169,8 @@ void startBot(){
         scanf("%s", filename);
         imprimeJogoFile(filename, save, FALSE);
     }
-
+    libertaTabuleiro(tab, NLIN);
+    libertaListaLigada(save);
 }
 
 int finish(Tabuleiro **tab, Save *save){
@@ -168,6 +181,11 @@ int finish(Tabuleiro **tab, Save *save){
             count += verificaCompletoTab(tab[i][j]);
             if(tab[i][j].completed == 0)
                 tab[i][j].completed = verificaTabuleiro(tab[i][j]);
+            else if (tab[i][j].completed == 1) {
+                completaTabuleiro(tab[i][j].tab, 1);
+            } else {
+                completaTabuleiro(tab[i][j].tab, 2);
+            }
         }
     }
 
@@ -219,17 +237,12 @@ int menuPrincipal() {
     printf("Escolha uma das seguintes opcoes:\n");
     printf("1. Jogar contra outro Jogador\n");
     printf("2. Jogar contra Bot\n");
-    printf("3. Regras\n");
     printf("9. SAIR\n");
 
     printf(">>> ");
     scanf("%d", &option);
     printf("\n");
     return option;
-}
-
-void regras(){
-
 }
 
 int jogador(int jogada){

@@ -164,3 +164,14 @@ void libertaTabuleiro(Tabuleiro **tab, int nLin){
         free(tab[i]);
     free(tab);
 }
+
+void completaTabuleiro (char** tab, int jogador) {
+    for(int i = 0; i < NLIN; i++){
+        for(int j = 0; j < NCOL; j++){
+            if(jogador == 1)
+                tab[i][j] = 'O';
+            else
+                tab[i][j] = 'X';
+        }
+    }
+}

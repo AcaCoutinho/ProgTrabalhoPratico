@@ -32,4 +32,6 @@ int verificaCompletoTab(Tabuleiro tab);
 
 void libertaTabuleiro(Tabuleiro **tab, int nLin);
 
+void completaTabuleiro (char** tab, int jogador);
+
 #endif /*MATDIN_H*/

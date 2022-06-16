@@ -169,6 +169,8 @@ void carregaJogoJogador(Save* save) {
     Save s;
     s.jogada = save->jogada;
     int player;
+    int option;
+    char filename[50];
 
     do{
         printf("Jogada: %d\n", ++s.jogada);
@@ -199,8 +201,16 @@ void carregaJogoJogador(Save* save) {
     }
     while(!finish(tab, &s));
     mostraVencedor(s);
-    libertaListaLigada(save);
+    deleteBinaryFile();
+    option = menuFicheiros();
+    if(option == 1){
+        fflush(stdin);
+        printf("Digita o nome do ficheiro:\n");
+        scanf("%s", filename);
+        imprimeJogoFile(filename, save, FALSE);
+    }
     libertaTabuleiro(tab, NLIN);
+    libertaListaLigada(save);
 }
 
 void carregaJogoBot(Save* save){
@@ -211,6 +221,8 @@ void carregaJogoBot(Save* save){
     Save s;
     s.jogada = save->jogada;
     int player;
+    int option;
+    char filename[50];
 
     do{
         printf("Jogada: %d\n", ++s.jogada);
@@ -245,8 +257,16 @@ void carregaJogoBot(Save* save){
     }
     while(!finish(tab, &s));
     mostraVencedor(s);
-    libertaListaLigada(save);
+    deleteBinaryFile();
+    option = menuFicheiros();
+    if(option == 1){
+        fflush(stdin);
+        printf("Digita o nome do ficheiro:\n");
+        scanf("%s", filename);
+        imprimeJogoFile(filename, save, FALSE);
+    }
     libertaTabuleiro(tab, NLIN);
+    libertaListaLigada(save);;
 }
 
 Tabuleiro** carregaTabuleiro(Tabuleiro **tab, Save *save){
@@ -265,7 +285,5 @@ Tabuleiro** carregaTabuleiro(Tabuleiro **tab, Save *save){
 void deleteBinaryFile(){
     if(remove("save.bin") != 0){
         printf("Erro ao deletar o ficheiro\n");
-    } else {
-        printf("\nFicheiro Binario Removido\n");
     }
 }
