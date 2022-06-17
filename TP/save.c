@@ -171,6 +171,7 @@ void carregaJogoJogador(Save* save) {
     int player;
     int option;
     char filename[50];
+    int finished;
 
     do{
         printf("Jogada: %d\n", ++s.jogada);
@@ -195,11 +196,12 @@ void carregaJogoJogador(Save* save) {
             }
         }
         while(!isFinished);
+        finished = finish(tab, &s);
         mostraTabuleiro(tab, NLIN, NCOL);
         save = insereInicio(save, s);
-        escreveFicheiroBinario(save, TRUE);
+        escreveFicheiroBinario(save, FALSE);
     }
-    while(!finish(tab, &s));
+    while(!finished);
     mostraVencedor(s);
     deleteBinaryFile();
     option = menuFicheiros();
@@ -223,6 +225,7 @@ void carregaJogoBot(Save* save){
     int player;
     int option;
     char filename[50];
+    int finished;
 
     do{
         printf("Jogada: %d\n", ++s.jogada);
@@ -251,11 +254,12 @@ void carregaJogoBot(Save* save){
             printf("Jogada: BOT\n");
             jogadaBot(tab, &s);
         }
+        finished = finish(tab, &s);
         mostraTabuleiro(tab, NLIN, NCOL);
         save = insereInicio(save, s);
         escreveFicheiroBinario(save, FALSE);
     }
-    while(!finish(tab, &s));
+    while(!finished);
     mostraVencedor(s);
     deleteBinaryFile();
     option = menuFicheiros();
@@ -278,6 +282,19 @@ Tabuleiro** carregaTabuleiro(Tabuleiro **tab, Save *save){
             tab[conversorLinColTab(save->lin-1)][conversorLinColTab(save->col-1)].tab[conversorLinCol(save->lin-1)][conversorLinCol(save->col-1)] = 'X';
         }
         save = save->nextPlay;
+
+        for(int i = 0; i < NLIN; i++){
+            for(int j = 0; j < NCOL; j++){
+                tab[i][j].completed = verificaTabuleiro(tab[i][j]);
+
+                if(tab[i][j].completed == 1){
+                    completaTabuleiro(tab[i][j].tab, 1);
+                }
+                if(tab[i][j].completed == 2){
+                    completaTabuleiro(tab[i][j].tab, 2);
+                }
+            }
+        }
     }
     return tab;
 }

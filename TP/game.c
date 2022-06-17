@@ -31,6 +31,9 @@ void game() {
                 carregaJogoBot(save);
             }
         }
+        if(option == 2){
+            deleteBinaryFile();
+        }
     }
 
     int option;
@@ -181,11 +184,6 @@ int finish(Tabuleiro **tab, Save *save){
             count += verificaCompletoTab(tab[i][j]);
             if(tab[i][j].completed == 0)
                 tab[i][j].completed = verificaTabuleiro(tab[i][j]);
-            else if (tab[i][j].completed == 1) {
-                completaTabuleiro(tab[i][j].tab, 1);
-            } else {
-                completaTabuleiro(tab[i][j].tab, 2);
-            }
         }
     }
 
@@ -221,6 +219,17 @@ int finish(Tabuleiro **tab, Save *save){
                 save->vencedor = 2;
             }
             return TRUE;
+        }
+    }
+
+    for(int i = 0; i < NLIN; i++){
+        for(int j = 0; j < NCOL; j++){
+            if (tab[i][j].completed == 1) {
+                completaTabuleiro(tab[i][j].tab, 1);
+            }
+            if (tab[i][j].completed == 2){
+                completaTabuleiro(tab[i][j].tab, 2);
+            }
         }
     }
 
